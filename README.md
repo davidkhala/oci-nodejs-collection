@@ -7,8 +7,8 @@ The project is a non-exhaustive selection, majorly consists of URL, documentatio
 &lt;Installation instructions go here&gt;
 
 ## Documentation
-&lt;Links to documentation go here&gt;
-
+[![NPM](https://nodei.co/npm/oci-sdk.png)](https://nodei.co/npm/oci-sdk/)
+[![NPM](https://nodei.co/npm/@fnproject/fdk.png)](https://nodei.co/npm/@fnproject/fdk/)
 ## Examples
 &lt;Describe where to find examples&gt;
 
