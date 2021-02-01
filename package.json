@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "dependencies": {
-    "oracledb": "latest",
     "oci-sdk": "latest",
     "@fnproject/fdk": "latest"
   }

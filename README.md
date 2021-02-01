@@ -9,7 +9,7 @@ The project is a non-exhaustive selection, majorly consists of URL, documentatio
 ## Documentation
 [![NPM](https://nodei.co/npm/oci-sdk.png)](https://nodei.co/npm/oci-sdk/)
 [![NPM](https://nodei.co/npm/@fnproject/fdk.png)](https://nodei.co/npm/@fnproject/fdk/)
-[![NPM](https://nodei.co/npm/oracledb)](https://nodei.co/npm/oracledb)
+
 ## Examples
 &lt;Describe where to find examples&gt;
 
