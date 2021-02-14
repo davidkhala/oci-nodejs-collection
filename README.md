@@ -1,5 +1,5 @@
-# About OCI-JSDK-Catelog
-Oracle Cloud Infrastructure JavaScript Development Kit Catalog is a place to aggregate usefull develop resources for javascript programmer.  
+# About OCI Nodejs Collection
+Oracle Cloud Infrastructure Nodejs Development Kit is a place to aggregate usefull develop resources for javascript programmer.  
 
 The project is a non-exhaustive selection, majorly consists of URL, documentation, GettingStart, script, code template and API. 
 
