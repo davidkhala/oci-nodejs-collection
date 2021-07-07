@@ -1,12 +1,10 @@
 {
   "name": "oci-key-vault",
   "version": "1.0.0",
-  "private": true,
   "dependencies": {
-    "oci-vault": "latest"
+    "oci-keymanagement": "latest"
   },
   "devDependencies": {
     "mocha": "latest-6",
-    "oci-common": "latest"
   }
 }

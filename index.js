@@ -3,6 +3,10 @@ const {IdentityClient} = require("oci-identity");
 
 class _Connector {
     constructor() {
+        /**
+         *
+         * @type {AuthenticationDetailsProvider}
+         */
         this.provider = undefined
     }
 
@@ -10,16 +14,13 @@ class _Connector {
         const identityClient = new IdentityClient({
             authenticationDetailsProvider: this.provider
         });
-        const {
-            items,
-            opcRequestId
-        } = await identityClient.listRegionSubscriptions({tenancyId: this.provider.getTenantId()});
+        const {items} = await identityClient.listRegionSubscriptions({tenancyId: this.provider.getTenantId()});
         for (const item of items) {
             if (item.isHomeRegion) {
                 identityClient.regionId = item.regionName;
             }
         }
-        return [identityClient, opcRequestId]
+        return identityClient
     }
 }
 
