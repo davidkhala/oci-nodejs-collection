@@ -87,7 +87,7 @@ class KeyOperator {
      * @param [keyVersionId]
      * @return {Promise<string>}
      */
-    async sign(keyId, message, signingAlgorithm , keyVersionId) {
+    async sign(keyId, message, signingAlgorithm, keyVersionId) {
 
         const signDataDetails = {
             message: Buffer.from(message).toString('base64'),
@@ -96,7 +96,7 @@ class KeyOperator {
             signingAlgorithm
         }
 
-        const {signedData:{signature}} =  await this.cryptoOperator.sign({signDataDetails})
+        const {signedData: {signature}} = await this.cryptoOperator.sign({signDataDetails})
         return signature
     }
 }
