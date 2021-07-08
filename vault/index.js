@@ -1,11 +1,12 @@
-const {models} = require('oci-keymanagement')
+const model = require('oci-keymanagement/lib/model')
+const {SignDataDetails: {SigningAlgorithm: {EcdsaSha256}}} = model
 
 const {KmsVaultClient, KmsManagementClient, KmsCryptoClient} = require('oci-keymanagement/lib/client')
 
 /**
  * https://github.com/oracle/oci-typescript-sdk/blob/master/examples/javascript/keymanagement.js
  */
-class Vault {
+class VaultManager {
     /**
      *
      * @param {_Connector} connector
@@ -18,7 +19,7 @@ class Vault {
     /**
      *
      * @param {string} compartmentId
-     * @return {Promise<models.VaultSummary[]>}
+     * @return {Promise<model.VaultSummary[]>}
      */
     async list(compartmentId) {
         const request = {compartmentId}
@@ -29,7 +30,7 @@ class Vault {
     /**
      *
      * @param {string} vaultId - OCID of vault
-     * @return {Promise<models.Vault>}
+     * @return {Promise<model.Vault>}
      */
     async get(vaultId) {
         const {vault} = await this.vault.getVault({vaultId})
@@ -37,11 +38,11 @@ class Vault {
     }
 }
 
-class Key {
+class KeyOperator {
     /**
      *
      * @param {_Connector} connector
-     * @param {models.VaultSummary|models.Vault} vault
+     * @param {model.VaultSummary|model.Vault} vault
      */
     constructor(connector, vault) {
         const {provider} = connector
@@ -61,7 +62,7 @@ class Key {
 
     /**
      * @param keyId OCID of key
-     * @return {Promise<models.Key>}
+     * @return {Promise<model.Key>}
      */
     async get(keyId) {
         const {key} = await this.kms.getKey({keyId})
@@ -78,19 +79,31 @@ class Key {
         return await this.cryptoOperator.encrypt({encryptDataDetails})
     }
 
-    async sign(keyId, message) {
+    /**
+     *
+     * @param keyId
+     * @param message
+     * @param {SigningAlgorithm} signingAlgorithm default to ECDSA_SHA_256
+     * @param [keyVersionId]
+     * @return {Promise<model.SignedData>}
+     */
+    async sign(keyId, message, signingAlgorithm , keyVersionId) {
+
         const signDataDetails = {
-            message,
+            message: Buffer.from(message).toString('base64'),
             keyId,
+            keyVersionId,
+            signingAlgorithm
         }
-        // FIXME: Error: Internal Server Error
-        return await this.cryptoOperator.sign({signDataDetails})
+
+        const {signedData:{signature}} =  await this.cryptoOperator.sign({signDataDetails})
+        return signature
     }
 }
 
 module.exports = {
-    Vault,
-    Key,
+    Vault: VaultManager,
+    Key: KeyOperator,
 }
 
 

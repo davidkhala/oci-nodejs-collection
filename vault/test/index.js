@@ -37,7 +37,7 @@ describe('key', () => {
     it('encrypt', async () => {
 
         const key = new Key(auth, oneVault)
-
-        await key.sign(keyID, 'abc')
+        const signature = await key.sign(keyID, 'EXAMPLE-message-Value', 'ECDSA_SHA_256')
+        console.debug(signature)
     })
 })
