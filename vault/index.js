@@ -85,7 +85,7 @@ class KeyOperator {
      * @param message
      * @param {SigningAlgorithm} signingAlgorithm default to ECDSA_SHA_256
      * @param [keyVersionId]
-     * @return {Promise<model.SignedData>}
+     * @return {Promise<string>}
      */
     async sign(keyId, message, signingAlgorithm , keyVersionId) {
 

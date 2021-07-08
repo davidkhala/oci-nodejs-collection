@@ -1,10 +1,10 @@
 {
-  "name": "oci-key-vault",
-  "version": "1.0.0",
+  "name": "@davidkhala/oci-key-vault",
+  "version": "0.0.0",
   "dependencies": {
     "oci-keymanagement": "latest"
   },
   "devDependencies": {
-    "mocha": "latest-6",
+    "mocha": "latest-6"
   }
 }
