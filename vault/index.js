@@ -83,7 +83,7 @@ class KeyOperator {
      *
      * @param keyId
      * @param message
-     * @param {SigningAlgorithm} signingAlgorithm default to ECDSA_SHA_256
+     * @param {SigningAlgorithm} signingAlgorithm
      * @param [keyVersionId]
      * @return {Promise<string>}
      */

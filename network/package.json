@@ -1,0 +1,11 @@
+{
+  "name": "oci-network-collection",
+  "version": "1.0.0",
+  "dependencies": {
+    "oci-networkloadbalancer": "latest",
+    "oci-loadbalancer": "latest"
+  },
+  "devDependencies": {
+    "mocha": "latest-6"
+  }
+}
