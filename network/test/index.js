@@ -1,10 +1,9 @@
 const {FileAuthentication} = require('../../index')
 const auth = new FileAuthentication()
 const compartmentId = 'ocid1.compartment.oc1..aaaaaaaaw2hdbvkul6ocyl6lrowdiu3y44sop4owoya5nrmhlsx7d3gbyrea'
-const assert = require('assert')
-const LB = require('../load-balancer')
 
 describe('load-balancer', () => {
+	const LB = require('../load-balancer')
 	const lb = new LB(auth)
 	it('get load-balancer', async () => {
 
@@ -13,13 +12,46 @@ describe('load-balancer', () => {
 		console.debug(result)
 	})
 	it('load balancer not found', async () => {
-		const lbid = 'ocid1.loadbalancer.oc1.ap-sydney-1.aaaaaaaahvnci5ytaz3mjtbhopdge2qugtnma64sdhkxetzn475homwxqaba'
+		const lbid = 'ocid1.networkloadbalancer.oc1.ap-sydney-1.amaaaaaahxv2vbyaybfhp7mdx65krbb46rjmcbzxudsys7dauhkzezz2vj3a'
 		const result = await lb.get(lbid)
 		console.debug(result)
 	})
+	it('network load-balancer', async () => {
+		const lbid = 'ocid1.networkloadbalancer.oc1.ap-sydney-1.amaaaaaahxv2vbyaybfhp7mdx65krbb46rjmcbzxudsys7dauhkzezz2vj3a'
+		const result = await lb.get(lbid, 'NetworkLoadBalancer')
+		console.debug(result)
+	})
 	it('list load-balancer', async () => {
-		const lb = new LB(auth)
+
 		const result = await lb.list(compartmentId)
+		console.debug(result)
+	})
+})
+describe('web application firewall', () => {
+	const WAF = require('../firewall')
+	const waf = new WAF(auth)
+	let wafID
+	it('create WAF', async function () {
+		this.timeout(0)
+		const domains = [Date.now() + '.davidkhala.com'] // Domain URL '*.davidkhala.com' is not valid
+		const origins = ['152.67.106.5']
+		const result = await waf.create({compartmentId, domains, origins})
+		console.info(result)
+		wafID = result
+	})
+	it('create WAF: single origin', async function () {
+		this.timeout(0)
+		const domains = [Date.now() + '.davidkhala.com'] // Domain URL '*.davidkhala.com' is not valid
+		const origins = '152.67.106.5'
+		const result = await waf.create({compartmentId, domains, origins})
+		console.info(result)
+		wafID = result
+	})
+
+	it('get WAF', async function () {
+		this.timeout(0)
+		const id = 'ocid1.waaspolicy.oc1..aaaaaaaat75fcywlzfeihw2j66ewxkf4dgh6vdovghros2jejcqhf32qqbta'
+		const result = await waf.get(wafID || id)
 		console.debug(result)
 	})
 })

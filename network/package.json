@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "dependencies": {
     "oci-networkloadbalancer": "latest",
-    "oci-loadbalancer": "latest"
+    "oci-loadbalancer": "latest",
+    "oci-waas": "latest"
   },
   "devDependencies": {
     "mocha": "latest-6"
