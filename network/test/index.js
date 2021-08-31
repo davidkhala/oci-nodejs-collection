@@ -33,11 +33,15 @@ describe('web application firewall', () => {
 	let wafID
 	it('create WAF', async function () {
 		this.timeout(0)
-		const domains = [Date.now() + '.davidkhala.com'] // Domain URL '*.davidkhala.com' is not valid
+		const domains = ['davidkhala.com'] // Domain URL '*.davidkhala.com' is not valid
 		const origins = ['152.67.106.5']
 		const result = await waf.create({compartmentId, domains, origins})
 		console.info(result)
 		wafID = result
+	})
+	it('delete waf', async function (){
+		this.timeout(0)
+		await waf.delete(wafID||process.env.wafID)
 	})
 	it('create WAF: single origin', async function () {
 		this.timeout(0)
@@ -50,7 +54,7 @@ describe('web application firewall', () => {
 
 	it('get WAF', async function () {
 		this.timeout(0)
-		const id = 'ocid1.waaspolicy.oc1..aaaaaaaat75fcywlzfeihw2j66ewxkf4dgh6vdovghros2jejcqhf32qqbta'
+		const id = 'ocid1.waaspolicy.oc1..aaaaaaaaffl3vz2j3hwyoauvzkb75rpid3vx4uxyeznqz6oca3pgr7daieha'
 		const result = await waf.get(wafID || id)
 		console.debug(result)
 	})

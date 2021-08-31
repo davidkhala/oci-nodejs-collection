@@ -22,6 +22,12 @@ class FireWall {
 	async create({compartmentId, displayName, domains, origins: rawOrigins, policyConfig}) {
 		const [domain, ...additionalDomains] = domains
 
+		if (domain && domain.includes('*')) {
+			throw Error(`Domain URL '${domain}' is not valid`)
+		}
+		if (additionalDomains.length === 0) {
+			additionalDomains.push(`*.${domain}`)
+		}
 		const originGroups = {}
 		const origins = {}
 		const wafConfig = {}
@@ -42,7 +48,7 @@ class FireWall {
 			}
 			wafConfig.origin = rawOrigins
 			wafConfig.originGroups = [defaultOriginGroup]
-		}else {
+		} else {
 			// TODO case: rawOrigins is an Object
 		}
 		const createWaasPolicyDetails = {
@@ -62,9 +68,14 @@ class FireWall {
 
 	}
 
-	// TODO
 	async delete(waasPolicyId) {
-
+		const {opcWorkRequestId} = await this.waf.deleteWaasPolicy({waasPolicyId})
+		const {
+			workRequest: {
+				resources
+			}
+		} = await this.waiter.forWorkRequest({workRequestId: opcWorkRequestId})
+		return resources[0].identifier
 	}
 
 	async get(waasPolicyId) {
