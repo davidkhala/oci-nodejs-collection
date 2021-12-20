@@ -1,8 +1,9 @@
 import WorkRequest from '../work-request.js'
-import {FileAuthentication} from '../index.js'
-const auth = new FileAuthentication()
+import {SimpleAuthentication} from '../index.js'
+const auth = new SimpleAuthentication(process.env)
 const compartmentId = 'ocid1.compartment.oc1..aaaaaaaaw2hdbvkul6ocyl6lrowdiu3y44sop4owoya5nrmhlsx7d3gbyrea'
-describe('work-request', () => {
+describe('work-request', function () {
+	this.timeout(0)
 	const workRequest = new WorkRequest(auth)
 	it('get by compartment', async () => {
 

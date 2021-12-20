@@ -1,6 +1,6 @@
-import {FileAuthentication} from '../../common'
+import {SimpleAuthentication} from '../../common'
 
-const auth = new FileAuthentication()
+const auth = new SimpleAuthentication()
 const compartmentId = 'ocid1.compartment.oc1..aaaaaaaaw2hdbvkul6ocyl6lrowdiu3y44sop4owoya5nrmhlsx7d3gbyrea'
 
 describe('load-balancer', () => {

@@ -1,6 +1,6 @@
 import {SimpleAuthenticationDetailsProvider, Region, ConfigFileAuthenticationDetailsProvider} from "oci-common";
 import {IdentityClient} from "oci-identity";
-
+import assert from "assert";
 class _Connector {
 	constructor() {
 		/**
@@ -14,20 +14,24 @@ class _Connector {
 		const identityClient = new IdentityClient({
 			authenticationDetailsProvider: this.provider
 		});
-		const {items} = await identityClient.listRegionSubscriptions({tenancyId: this.provider.getTenantId()});
-		for (const item of items) {
-			if (item.isHomeRegion) {
-				identityClient.regionId = item.regionName;
-			}
-		}
+
+		await identityClient.listRegions({})
+
 		return identityClient
 	}
 }
 
 export class SimpleAuthentication extends _Connector {
-	constructor({tenancy, user, fingerprint, privateKey, regionId}) {
+	constructor({tenancy, user, fingerprint, privateKey, regionId} = {}) {
 		super()
-		this.provider = new SimpleAuthenticationDetailsProvider(tenancy, user, fingerprint, privateKey, null, Region.fromRegionId(regionId));
+		try {
+			const fileAuthN = new FileAuthentication()
+			assert.ok(fileAuthN.validate())
+			this.provider = fileAuthN.provider
+		}catch (e){
+			this.provider = new SimpleAuthenticationDetailsProvider(tenancy, user, fingerprint, privateKey, null, Region.fromRegionId(regionId));
+		}
+
 	}
 }
 
@@ -35,6 +39,18 @@ export class FileAuthentication extends _Connector {
 	constructor() {
 		super()
 		this.provider = new ConfigFileAuthenticationDetailsProvider()
+	}
+
+	validate() {
+		const {provider} = this
+		return provider.getPrivateKey() && provider.getFingerprint() && provider.getTenantId() && provider.getUser()
+	}
+
+	async connect() {
+		if (this.validate()) {
+			return super.connect();
+		}
+
 	}
 
 }
