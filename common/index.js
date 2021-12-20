@@ -1,5 +1,5 @@
-const {SimpleAuthenticationDetailsProvider, Region, ConfigFileAuthenticationDetailsProvider} = require("oci-common");
-const {IdentityClient} = require("oci-identity");
+import {SimpleAuthenticationDetailsProvider, Region, ConfigFileAuthenticationDetailsProvider} from "oci-common";
+import {IdentityClient} from "oci-identity";
 
 class _Connector {
 	constructor() {
@@ -24,14 +24,14 @@ class _Connector {
 	}
 }
 
-class SimpleAuthentication extends _Connector {
+export class SimpleAuthentication extends _Connector {
 	constructor({tenancy, user, fingerprint, privateKey, regionId}) {
 		super()
 		this.provider = new SimpleAuthenticationDetailsProvider(tenancy, user, fingerprint, privateKey, null, Region.fromRegionId(regionId));
 	}
 }
 
-class FileAuthentication extends _Connector {
+export class FileAuthentication extends _Connector {
 	constructor() {
 		super()
 		this.provider = new ConfigFileAuthenticationDetailsProvider()
@@ -39,7 +39,23 @@ class FileAuthentication extends _Connector {
 
 }
 
-module.exports = {
-	SimpleAuthentication,
-	FileAuthentication,
+export class AbstractService {
+	/**
+	 *
+	 * @param {_Connector} connector
+	 * @param {function} ClientCLass
+	 */
+	constructor(connector, ClientCLass) {
+		const {provider} = connector
+		this.client = new ClientCLass({authenticationDetailsProvider: provider})
+
+	}
+
+	/**
+	 *
+	 * @param {function} WaiterClass
+	 */
+	withWaiter(WaiterClass) {
+		this.waiter = new WaiterClass(this.client)
+	}
 }

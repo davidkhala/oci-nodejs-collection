@@ -1,0 +1,9 @@
+{
+  "name": "@davidkhala/oci-logging",
+  "version": "1.0.0",
+  "dependencies": {
+    "oci-logging": "latest",
+    "khala-logger": "latest"
+  },
+  "type": "module"
+}

@@ -1,6 +1,6 @@
-const {WorkRequestClient, waitForWorkRequest} = require('oci-workrequests')
+import {WorkRequestClient} from 'oci-workrequests'
 
-class WorkRequest {
+export default class WorkRequest {
 	/**
 	 *
 	 * @param {_Connector} connector
@@ -15,5 +15,3 @@ class WorkRequest {
 		return items
 	}
 }
-
-module.exports = WorkRequest

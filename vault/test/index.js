@@ -1,5 +1,5 @@
 const {Vault, Key} = require('../index')
-const {FileAuthentication} = require('../../index')
+const {FileAuthentication} = require('../../common')
 const auth = new FileAuthentication()
 const compartmentId = 'ocid1.compartment.oc1..aaaaaaaaw2hdbvkul6ocyl6lrowdiu3y44sop4owoya5nrmhlsx7d3gbyrea'
 const assert = require('assert')

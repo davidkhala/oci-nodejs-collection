@@ -1,4 +1,5 @@
-const {FileAuthentication} = require('../../index')
+import {FileAuthentication} from '../../common'
+
 const auth = new FileAuthentication()
 const compartmentId = 'ocid1.compartment.oc1..aaaaaaaaw2hdbvkul6ocyl6lrowdiu3y44sop4owoya5nrmhlsx7d3gbyrea'
 
@@ -39,9 +40,9 @@ describe('web application firewall', () => {
 		console.info(result)
 		wafID = result
 	})
-	it('delete waf', async function (){
+	it('delete waf', async function () {
 		this.timeout(0)
-		await waf.delete(wafID||process.env.wafID)
+		await waf.delete(wafID || process.env.wafID)
 	})
 	it('create WAF: single origin', async function () {
 		this.timeout(0)

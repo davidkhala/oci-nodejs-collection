@@ -1,5 +1,5 @@
-const WorkRequest = require('../work-request')
-const {FileAuthentication} = require('../index')
+import WorkRequest from '../work-request.js'
+import {FileAuthentication} from '../index.js'
 const auth = new FileAuthentication()
 const compartmentId = 'ocid1.compartment.oc1..aaaaaaaaw2hdbvkul6ocyl6lrowdiu3y44sop4owoya5nrmhlsx7d3gbyrea'
 describe('work-request', () => {
