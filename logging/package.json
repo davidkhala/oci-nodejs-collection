@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "dependencies": {
     "oci-logging": "latest",
-    "khala-logger": "latest"
+    "@davidkhala/oci-common": "latest",
+    "oci-loggingingestion": "latest"
+  },
+  "devDependencies": {
+    "mocha": "latest"
   },
   "type": "module"
 }

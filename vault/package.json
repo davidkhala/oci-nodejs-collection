@@ -5,6 +5,7 @@
     "oci-keymanagement": "latest"
   },
   "devDependencies": {
-    "mocha": "latest-6"
+    "mocha": "latest",
+    "@davidkhala/oci-common": "latest"
   }
 }

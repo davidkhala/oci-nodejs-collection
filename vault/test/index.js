@@ -1,8 +1,8 @@
-const {Vault, Key} = require('../index')
-const {FileAuthentication} = require('../../common')
-const auth = new FileAuthentication()
-const compartmentId = 'ocid1.compartment.oc1..aaaaaaaaw2hdbvkul6ocyl6lrowdiu3y44sop4owoya5nrmhlsx7d3gbyrea'
+import {Vault, Key} from '../index.js'
+import {SimpleAuthentication} from '../../common'
+const auth = new SimpleAuthentication(process.env)
 const assert = require('assert')
+const compartmentId = 'ocid1.compartment.oc1..aaaaaaaaw2hdbvkul6ocyl6lrowdiu3y44sop4owoya5nrmhlsx7d3gbyrea'
 describe('vault', () => {
     const vault = new Vault(auth)
     before(async () => {

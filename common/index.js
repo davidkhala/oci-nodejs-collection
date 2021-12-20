@@ -1,6 +1,7 @@
 import {SimpleAuthenticationDetailsProvider, Region, ConfigFileAuthenticationDetailsProvider} from "oci-common";
 import {IdentityClient} from "oci-identity";
 import assert from "assert";
+
 class _Connector {
 	constructor() {
 		/**
@@ -22,13 +23,13 @@ class _Connector {
 }
 
 export class SimpleAuthentication extends _Connector {
-	constructor({tenancy, user, fingerprint, privateKey, regionId} = {}) {
+	constructor({tenancy, user, fingerprint, privateKey, regionId} = process.env) {
 		super()
 		try {
 			const fileAuthN = new FileAuthentication()
 			assert.ok(fileAuthN.validate())
 			this.provider = fileAuthN.provider
-		}catch (e){
+		} catch (e) {
 			this.provider = new SimpleAuthenticationDetailsProvider(tenancy, user, fingerprint, privateKey, null, Region.fromRegionId(regionId));
 		}
 
@@ -73,5 +74,18 @@ export class AbstractService {
 	 */
 	withWaiter(WaiterClass) {
 		this.waiter = new WaiterClass(this.client)
+	}
+
+	async wait({opcWorkRequestId}, expectedOperationType) {
+		if (!this.waiter) {
+			return
+		}
+		const {workRequest} = await this.waiter.forWorkRequest({workRequestId: opcWorkRequestId})
+		const {operationType, status, resources} = workRequest
+		if (expectedOperationType) {
+			assert.strictEqual(operationType, expectedOperationType)
+		}
+		assert.strictEqual(status, 'SUCCEEDED')
+		return resources.map(({identifier}) => identifier)
 	}
 }

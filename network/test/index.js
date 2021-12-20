@@ -1,10 +1,10 @@
-import {SimpleAuthentication} from '../../common'
+import {SimpleAuthentication} from '@davidkhala/oci-common'
 
-const auth = new SimpleAuthentication()
+const auth = new SimpleAuthentication(process.env)
 const compartmentId = 'ocid1.compartment.oc1..aaaaaaaaw2hdbvkul6ocyl6lrowdiu3y44sop4owoya5nrmhlsx7d3gbyrea'
 
 describe('load-balancer', () => {
-	const LB = require('../load-balancer')
+	import LB from '../load-balancer.js'
 	const lb = new LB(auth)
 	it('get load-balancer', async () => {
 
@@ -29,7 +29,7 @@ describe('load-balancer', () => {
 	})
 })
 describe('web application firewall', () => {
-	const WAF = require('../firewall')
+	import WAF from '../firewall.js'
 	const waf = new WAF(auth)
 	let wafID
 	it('create WAF', async function () {
