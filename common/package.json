@@ -1,6 +1,6 @@
 {
   "name": "@davidkhala/oci-common",
-  "version": "0.0.0-beta",
+  "version": "0.0.1",
   "dependencies": {
     "oci-common": "latest",
     "oci-identity": "latest",

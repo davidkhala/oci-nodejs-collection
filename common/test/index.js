@@ -13,7 +13,8 @@ describe('auth', function () {
 		const {privateKey, fingerprint} = process.env
 		const auth = new SimpleAuthentication({tenancy, user, fingerprint, privateKey, regionId});
 
-		await auth.connect()
+		const client = await auth.connect()
+		console.debug(client)
 	})
 
 })

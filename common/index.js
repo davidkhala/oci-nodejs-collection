@@ -61,10 +61,15 @@ export class AbstractService {
 	 *
 	 * @param {_Connector} connector
 	 * @param {function} ClientCLass
+	 * @param [client]
 	 */
-	constructor(connector, ClientCLass) {
-		const {provider} = connector
-		this.client = new ClientCLass({authenticationDetailsProvider: provider})
+	constructor(connector, ClientCLass, client) {
+		if (client) {
+			this.client = client
+		} else {
+			const {provider} = connector
+			this.client = new ClientCLass({authenticationDetailsProvider: provider})
+		}
 
 	}
 

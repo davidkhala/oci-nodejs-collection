@@ -7,7 +7,6 @@ export class Logger extends AbstractService {
 		this.logId = logId
 	}
 
-
 	/**
 	 * @typedef {Object} LogEntry
 	 * @property {string} data

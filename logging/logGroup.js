@@ -6,6 +6,7 @@ export class LogGroup extends AbstractService {
 
 	constructor(connector) {
 		super(connector, LoggingManagementClient);
+		this.connector = connector
 		this.withWaiter(LoggingManagementWaiter)
 	}
 
@@ -34,7 +35,11 @@ export class LogGroup extends AbstractService {
 	async clear(compartmentId) {
 		const items = await this.list(compartmentId)
 		for (const id of items.map(({id}) => id)) {
-			// TODO clear recursive
+			const log = new Log(this.connector,id)
+			const logList = await log.list()
+			for(const logId of logList.map(({id})=>id)){
+				await log.delete(logId)
+			}
 			await this.delete(id)
 		}
 
@@ -105,5 +110,3 @@ export class Log extends AbstractService {
 		await this.wait(response)
 	}
 }
-
-

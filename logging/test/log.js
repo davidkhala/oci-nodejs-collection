@@ -1,5 +1,7 @@
 import {LogGroup, Log} from '../logGroup.js'
 import {SimpleAuthentication} from "@davidkhala/oci-common"
+import {Logger} from '../logger.js'
+import assert from "assert";
 
 describe('logGroup', function () {
 	this.timeout(0)
@@ -11,6 +13,17 @@ describe('logGroup', function () {
 		const ocid = await logGroup.create(compartmentId, name)
 
 		await logGroup.delete(ocid)
+	})
+	it('create anonymous and failed', async () => {
+		try {
+			await logGroup.create(compartmentId)
+		} catch (e) {
+			const {serviceCode, statusCode, message} = e
+			assert.strictEqual(statusCode, 400)
+			assert.strictEqual(serviceCode, 'InvalidParameter')
+			assert.strictEqual(message, 'Invalid displayName')
+		}
+
 	})
 	it('list', async () => {
 		const items = await logGroup.list(compartmentId)
@@ -47,7 +60,10 @@ describe('log item', function () {
 })
 describe('write log', function () {
 	this.timeout(0)
-	const endpoint = 'https://ingestion.logging.ap-seoul-1.oci.oraclecloud.com'
 
+	const compartmentId = 'ocid1.compartment.oc1..aaaaaaaaw2hdbvkul6ocyl6lrowdiu3y44sop4owoya5nrmhlsx7d3gbyrea'
+	before(async () => {
+
+	})
 
 })
