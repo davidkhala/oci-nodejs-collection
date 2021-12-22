@@ -1,6 +1,6 @@
 import {LogGroup, Log} from '../logGroup.js'
 import {SimpleAuthentication} from "@davidkhala/oci-common"
-import {Logger} from '../logger.js'
+import {log} from '../simpleLogger.js'
 import assert from "assert";
 
 describe('logGroup', function () {
@@ -14,6 +14,11 @@ describe('logGroup', function () {
 
 		await logGroup.delete(ocid)
 	})
+	it('create if not exist', async () => {
+		const name = 'temp'
+		const ocid = await logGroup.create(compartmentId, name)
+		console.debug(ocid)
+	})
 	it('create anonymous and failed', async () => {
 		try {
 			await logGroup.create(compartmentId)
@@ -26,8 +31,8 @@ describe('logGroup', function () {
 
 	})
 	it('list', async () => {
-		const items = await logGroup.list(compartmentId)
-		console.debug(items.map(({id}) => id))
+		const ids = await logGroup.list(compartmentId)
+		console.debug(ids)
 	})
 	it('clear', async () => {
 		await logGroup.clear(compartmentId)
@@ -47,23 +52,24 @@ describe('log item', function () {
 	})
 	it('create log item', async () => {
 
-		await log.create('log')
+		const ocid = await log.create('log')
+		console.info(ocid)
 	})
 	it('clear log items', async () => {
 		await log.clear()
-
 	})
 
 	after(async () => {
 		await logGroup.delete(logGroupId)
 	})
 })
+
 describe('write log', function () {
 	this.timeout(0)
-
+	const auth = new SimpleAuthentication()
 	const compartmentId = 'ocid1.compartment.oc1..aaaaaaaaw2hdbvkul6ocyl6lrowdiu3y44sop4owoya5nrmhlsx7d3gbyrea'
-	before(async () => {
-
+	it('put', async () => {
+		await log(auth.provider, compartmentId, 'debug', 'logContent')
 	})
 
 })

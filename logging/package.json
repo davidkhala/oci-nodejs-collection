@@ -6,6 +6,9 @@
     "@davidkhala/oci-common": "latest",
     "oci-loggingingestion": "latest"
   },
+  "scripts": {
+    "test": "mocha test"
+  },
   "devDependencies": {
     "mocha": "latest"
   },

@@ -4,6 +4,8 @@ env:
   tenancy: 'ocid1.tenancy.oc1..aaaaaaaakatveh74zmu3624wgdcs2zcud5emtkpeqrv3b4xnc6gwlw52nvtq'
   user: 'ocid1.user.oc1..aaaaaaaagu3ghstfw5oynuruw6hudunbjsmroyko6ue6lnshxumwskv2ipjq'
   regionId: 'ap-seoul-1'
+  fingerprint: ${{ secrets.FINGER_PRINT }}
+  privateKey: ${{ secrets.PRIVATE_KEY }}
 jobs:
   common:
     runs-on: ubuntu-latest
@@ -15,7 +17,13 @@ jobs:
       - uses: actions/setup-node@v2
       - run: npm install
       - run: npm test
-        env:
-
-          fingerprint: ${{ secrets.FINGER_PRINT }}
-          privateKey: ${{ secrets.PRIVATE_KEY }}
+  logging:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: logging
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+      - run: npm install
+      - run: npm test
