@@ -1,4 +1,3 @@
-name: test nodejs
 on: push
 env:
   tenancy: 'ocid1.tenancy.oc1..aaaaaaaakatveh74zmu3624wgdcs2zcud5emtkpeqrv3b4xnc6gwlw52nvtq'

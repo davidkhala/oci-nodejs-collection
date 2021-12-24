@@ -1,0 +1,8 @@
+{
+  "name": "oci-nodejs-collection",
+  "version": "1.0.0",
+  "private": "true",
+  "dependencies": {
+    "oci-sdk": "latest"
+  }
+}
