@@ -1,5 +1,5 @@
 {
-  "name": "oci-network-collection",
+  "name": "@davidkhala/oci-network",
   "version": "1.0.0",
   "dependencies": {
     "oci-networkloadbalancer": "latest",
