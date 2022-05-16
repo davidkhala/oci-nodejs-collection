@@ -23,16 +23,24 @@ class _Connector {
 }
 
 export class SimpleAuthentication extends _Connector {
+	/**
+	 *
+	 * @param tenancy
+	 * @param user
+	 * @param fingerprint
+	 * @param {string} privateKey pem format string
+	 * @param {string} regionId
+	 */
 	constructor({tenancy, user, fingerprint, privateKey, regionId} = process.env) {
 		super()
-		try {
+		if (privateKey && fingerprint) {
+			this.provider = new SimpleAuthenticationDetailsProvider(tenancy, user, fingerprint, privateKey, null, Region.fromRegionId(regionId));
+
+		} else {
 			const fileAuthN = new FileAuthentication()
 			assert.ok(fileAuthN.validate())
 			this.provider = fileAuthN.provider
-		} catch (e) {
-			this.provider = new SimpleAuthenticationDetailsProvider(tenancy, user, fingerprint, privateKey, null, Region.fromRegionId(regionId));
 		}
-
 	}
 }
 
