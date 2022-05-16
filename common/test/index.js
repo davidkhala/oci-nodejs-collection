@@ -14,7 +14,12 @@ describe('auth', function () {
 		const auth = new SimpleAuthentication({tenancy, user, fingerprint, privateKey, regionId});
 
 		const client = await auth.connect()
-		console.debug(client)
+	})
+	it('simpleAuth: file based', async () => {
+
+		const auth = new SimpleAuthentication();
+		console.debug(auth.provider.getPrivateKey())
+		console.debug(auth.provider.getFingerprint())
 	})
 
 })

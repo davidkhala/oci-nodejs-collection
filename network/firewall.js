@@ -1,14 +1,14 @@
-const {WaasClient, WaasWaiter} = require('oci-waas')
+import {WaasClient, WaasWaiter} from 'oci-waas'
+import {AbstractService} from '@davidkhala/oci-common'
 
-class FireWall {
+export default class FireWall extends AbstractService {
 	/**
 	 *
 	 * @param {_Connector} connector
 	 */
 	constructor(connector) {
-		const {provider} = connector
-		this.waf = new WaasClient({authenticationDetailsProvider: provider})
-		this.waiter = new WaasWaiter(this.waf)
+		super(connector, WaasClient);
+		this.withWaiter(WaasWaiter)
 	}
 
 	/**
@@ -79,7 +79,7 @@ class FireWall {
 	}
 
 	async get(waasPolicyId) {
-		const {waasPolicy} = await this.waf.getWaasPolicy({waasPolicyId})
+		const {waasPolicy} = await this.client.getWaasPolicy({waasPolicyId})
 		return waasPolicy
 	}
 
@@ -129,12 +129,10 @@ class FireWall {
 			//             [key: string]: any;
 			//         };
 			//     };
-			await this.waf.updateWaasPolicy({waasPolicyId, updateWaasPolicyDetails})
+			await this.client.updateWaasPolicy({waasPolicyId, updateWaasPolicyDetails})
 		} else {
 
 		}
 
 	}
 }
-
-module.exports = FireWall

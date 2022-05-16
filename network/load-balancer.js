@@ -1,7 +1,7 @@
-const {LoadBalancerClient} = require('oci-loadbalancer')
-const {NetworkLoadBalancerClient} = require('oci-networkloadbalancer')
+import {LoadBalancerClient} from 'oci-loadbalancer'
+import {NetworkLoadBalancerClient} from 'oci-networkloadbalancer'
 
-class LoadBalancer {
+export default class LoadBalancer {
 	/**
 	 *
 	 * @param {_Connector} connector
@@ -42,5 +42,3 @@ class LoadBalancer {
 		return items;
 	}
 }
-
-module.exports = LoadBalancer

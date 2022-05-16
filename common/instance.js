@@ -1,3 +1,3 @@
-import from 'khala-axios/index'
+import {} from 'khala-axios/index.js'
 
 // TODO instance metadata

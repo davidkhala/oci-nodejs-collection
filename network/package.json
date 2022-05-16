@@ -4,10 +4,12 @@
   "dependencies": {
     "oci-networkloadbalancer": "latest",
     "oci-loadbalancer": "latest",
-    "oci-waas": "latest"
+    "oci-waas": "latest",
+    "oci-dns": "latest",
+    "@davidkhala/oci-common": "latest"
   },
   "devDependencies": {
-    "mocha": "latest",
-    "@davidkhala/oci-common": "latest"
-  }
+    "mocha": "latest"
+  },
+  "type": "module"
 }
