@@ -1,4 +1,9 @@
-import {SimpleAuthenticationDetailsProvider, Region, ConfigFileAuthenticationDetailsProvider} from "oci-common";
+import {
+	SimpleAuthenticationDetailsProvider,
+	Region,
+	ConfigFileAuthenticationDetailsProvider,
+	ResourcePrincipalAuthenticationDetailsProvider
+} from "oci-common";
 import {IdentityClient} from "oci-identity";
 import assert from "assert";
 
@@ -37,9 +42,14 @@ export class SimpleAuthentication extends _Connector {
 			this.provider = new SimpleAuthenticationDetailsProvider(tenancy, user, fingerprint, privateKey, null, Region.fromRegionId(regionId));
 
 		} else {
-			const fileAuthN = new FileAuthentication()
-			assert.ok(fileAuthN.validate())
-			this.provider = fileAuthN.provider
+			try {
+				const fileAuthN = new FileAuthentication()
+				assert.ok(fileAuthN.validate())
+				this.provider = fileAuthN.provider
+			} catch (e) {
+				this.provider = new IAMAuthentication()
+			}
+
 		}
 	}
 }
@@ -59,9 +69,15 @@ export class FileAuthentication extends _Connector {
 		if (this.validate()) {
 			return super.connect();
 		}
-
 	}
 
+}
+
+export class IAMAuthentication extends _Connector {
+	constructor() {
+		super();
+		this.provider = new ResourcePrincipalAuthenticationDetailsProvider()
+	}
 }
 
 export class AbstractService {

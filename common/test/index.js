@@ -40,5 +40,14 @@ describe('san check', function () {
 		const isAvailable = await auth.connect()
 		assert.ok(isAvailable)
 	})
+	it('instance principle', async () => {
+		if (process.env.CI) {
+			// skip for Github workflow
+			return
+		}
+		const auth = new SimpleAuthentication()
+		const isAvailable = await auth.connect()
+		assert.ok(isAvailable)
+	})
 })
 

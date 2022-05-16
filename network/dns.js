@@ -6,6 +6,4 @@ class Steering extends AbstractService {
 		super(connect, DnsClient);
 		this.withWaiter(DnsWaiter)
 	}
-
-
 }
