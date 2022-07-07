@@ -1,6 +1,7 @@
 {
   "name": "@davidkhala/oci-key-vault",
   "version": "0.0.0",
+  "type": "module",
   "dependencies": {
     "oci-keymanagement": "latest"
   },
