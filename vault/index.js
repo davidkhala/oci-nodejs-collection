@@ -104,7 +104,6 @@ class KeyOperator {
 			keyVersionId,
 			signingAlgorithm
 		}
-
 		const {signedData: {signature}} = await this.cryptoOperator.sign({signDataDetails})
 		return signature
 	}

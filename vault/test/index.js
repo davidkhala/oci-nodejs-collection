@@ -1,6 +1,7 @@
+import assert from 'assert'
 import {Vault, Key} from '../index.js'
 import {SimpleAuthentication} from '../../common/index.js'
-import assert from 'assert'
+import {execSync} from '@davidkhala/light/devOps.js'
 
 const auth = new SimpleAuthentication(process.env)
 const compartmentId = 'ocid1.tenancy.oc1..aaaaaaaaji4ohhurx2uydbjbvd2skio5ad5tp2nvu4azii2oy5tu5aol4phq'
@@ -66,9 +67,23 @@ describe('key', function () {
 		const keyID = 'ocid1.key.oc1.ap-singapore-1.enrhpwtoaabem.abzwsljrh263ohsu2o7rfg4eel67wcc6akv4575e52atvziwnh2qchrm6icq'
 		const key = new Key(auth, oneVault)
 		const message = 'EXAMPLE-message-Value'
-		const signature = await key.sign(keyID, message)
 
-		const result = await key.verify(keyID, signature, message)
+		const signature = await key.sign(keyID, message)
+		const result = await key.verify(keyID, signature, message,)
 		assert.ok(result)
+	})
+})
+
+describe('cli', function () {
+	this.timeout(0)
+	it.skip('RSA sign', async () => {
+		const keyID = 'ocid1.key.oc1.ap-singapore-1.enrhpwtoaabem.abzwsljrh263ohsu2o7rfg4eel67wcc6akv4575e52atvziwnh2qchrm6icq'
+		const message = Buffer.from('EXAMPLE-message-Value').toString('base64')
+
+		const pss = 'SHA_256_RSA_PKCS_PSS'
+		const endpoint = 'https://enrhpwtoaabem-crypto.kms.ap-singapore-1.oci.oraclecloud.com'
+		const cmd = `oci kms crypto signed-data sign --key-id ${keyID} --message ${message} --signing-algorithm ${pss} --endpoint ${endpoint}`
+		const {data} = JSON.parse(execSync(cmd))
+		console.info(data)
 	})
 })
