@@ -20,8 +20,7 @@ class _Connector {
 		const identityClient = new IdentityClient({
 			authenticationDetailsProvider: this.provider
 		});
-
-		await identityClient.listRegions({})
+		await identityClient.listAllCompartments({})
 
 		return identityClient
 	}

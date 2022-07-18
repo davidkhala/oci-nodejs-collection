@@ -4,8 +4,7 @@
   "dependencies": {
     "oci-common": "latest",
     "oci-identity": "latest",
-    "oci-workrequests": "latest",
-    "khala-axios": "latest"
+    "oci-workrequests": "latest"
   },
   "scripts": {
     "test": "mocha test"
