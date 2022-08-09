@@ -44,34 +44,41 @@ class KeyOperator {
      *
      * @param {_Connector} connector
      * @param {model.VaultSummary|model.Vault} vault
+     * @param {string} [keyId]
      */
-    constructor(connector, vault) {
+    constructor(connector, vault, keyId) {
         const {provider} = connector
-        const {cryptoEndpoint, managementEndpoint} = vault
+        const {cryptoEndpoint, managementEndpoint, compartmentId} = vault
         const kms = new KmsManagementClient({authenticationDetailsProvider: provider})
         kms.endpoint = managementEndpoint
         const cryptoOperator = new KmsCryptoClient({authenticationDetailsProvider: provider})
         cryptoOperator.endpoint = cryptoEndpoint
 
-        Object.assign(this, {kms, cryptoOperator})
+        Object.assign(this, {kms, cryptoOperator, keyId, compartmentId})
     }
 
-    async list(compartmentId) {
+    /**
+     *
+     * @param [compartmentId]
+     * @returns {Promise<*>}
+     */
+    async list(compartmentId = this.compartmentId) {
         const {items} = await this.kms.listKeys({compartmentId})
         return items
     }
 
     /**
-     * @param keyId OCID of key
      * @return {Promise<model.Key>}
      */
-    async get(keyId) {
+    async get() {
+        const {keyId} = this
         const {key} = await this.kms.getKey({keyId})
         return key
     }
 
-    async publicKeyOf(keyId) {
-        const {currentKeyVersion, keyShape: {algorithm}} = await this.get(keyId)
+    async publicKey() {
+        const {keyId} = this
+        const {currentKeyVersion, keyShape: {algorithm}} = await this.get()
         assert.ok(algorithm === 'ECDSA' || algorithm === 'RSA')
 
         const {keyVersion} = await this.kms.getKeyVersion({
@@ -81,7 +88,8 @@ class KeyOperator {
         return keyVersion.publicKey
     }
 
-    async encrypt(keyId, plaintext, keyVersionId) {
+    async encrypt(plaintext, keyVersionId) {
+        const {keyId} = this
         const encryptDataDetails = {
             keyId,
             plaintext,
@@ -93,17 +101,16 @@ class KeyOperator {
 
     /**
      *
-     * @param keyId
      * @param message
      * @param {SigningAlgorithm} [signingAlgorithm]
      * @param [keyVersionId]
-     * @return {Promise<string>}
+     * @return {Promise<string>} base64 format signature
      */
-    async sign(keyId, message, signingAlgorithm, keyVersionId) {
-
+    async sign(message, signingAlgorithm, keyVersionId) {
+        const {keyId} = this
         if (!signingAlgorithm) {
 
-            const {keyShape: {algorithm}, currentKeyVersion} = await this.get(keyId)
+            const {keyShape: {algorithm}, currentKeyVersion} = await this.get()
             signingAlgorithm = DefaultSigningAlgorithm[algorithm]
             if (!keyVersionId) {
                 keyVersionId = currentKeyVersion
@@ -121,17 +128,16 @@ class KeyOperator {
 
     /**
      *
-     * @param keyId
      * @param signature The base64-encoded binary data object denoting the cryptographic signature generated for the message.
      * @param message
      * @param [signingAlgorithm]
      * @param [keyVersionId]
      * @return {Promise<boolean>}
      */
-    async verify(keyId, signature, message, signingAlgorithm, keyVersionId) {
-
+    async verify(signature, message, signingAlgorithm, keyVersionId) {
+        const {keyId} = this
         if (!signingAlgorithm) {
-            const {currentKeyVersion, keyShape: {algorithm}} = await this.get(keyId)
+            const {currentKeyVersion, keyShape: {algorithm}} = await this.get()
             signingAlgorithm = DefaultSigningAlgorithm[algorithm]
             if (!keyVersionId) {
                 keyVersionId = currentKeyVersion

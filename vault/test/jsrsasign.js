@@ -20,11 +20,11 @@ describe('csr', function () {
         assert.ok(health)
         oneVault = await vault.get(vaultId)
     })
-    it('e2e', async () => {
+    it('Create CSR from key in OCI Vault', async () => {
 
         const keyID = 'ocid1.key.oc1.ap-singapore-1.enrhpwtoaabem.abzwsljrizggn5jlznyv7j64ccchehu6wc6vmfllyobilups4ahhp34pzyqq'
-        const key = new Key(auth, oneVault)
-        const keyPEM = await key.publicKeyOf(keyID)
+        const key = new Key(auth, oneVault, keyID)
+        const keyPEM = await key.publicKey()
 
         const publicKey = ECDSAKey.FromPEM(keyPEM);
         const subject = new X500Name();
@@ -38,7 +38,7 @@ describe('csr', function () {
 
         const unsignedHex = csr.getUnsignedHex();
         const message = Buffer.from(unsignedHex, 'hex')
-        const signature_base64 = await key.sign(keyID, message)
+        const signature_base64 = await key.sign(message)
         console.info(signature_base64);
         const sig_hex = Buffer.from(signature_base64, 'base64').toString('hex')
         const signatureAlgorithm = 'SHA256withECDSA'
