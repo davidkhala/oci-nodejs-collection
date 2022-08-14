@@ -3,7 +3,6 @@ import {Vault, Key} from '../index.js';
 import {SimpleAuthentication} from '../../common/index.js';
 import {execSync} from '@davidkhala/light/devOps.js';
 import crypto from 'crypto';
-import {SignDataDetails} from 'oci-keymanagement/lib/model/sign-data-details.js';
 
 const auth = new SimpleAuthentication(process.env);
 const compartmentId = 'ocid1.tenancy.oc1..aaaaaaaaji4ohhurx2uydbjbvd2skio5ad5tp2nvu4azii2oy5tu5aol4phq';
@@ -44,7 +43,9 @@ describe('key', function () {
 		const key = new Key(auth, oneVault, keyID);
 		const message = 'EXAMPLE-message-Value';
 		const signature = await key.sign(message);
-
+		console.info(signature);
+		console.info(signature.length);
+		// MEQCIDbhOG7/NBh4JnkUXQVNL/fbMZTBjwYuWA4WMgrcHojkAiBnlXTUrQMnscQHyQNGzMJSHvmEOcXAE7QSwOQxopROzw==
 		const result = await key.verify(signature, message);
 		assert.ok(result);
 	});
@@ -56,7 +57,9 @@ describe('key', function () {
 		const key = new Key(auth, oneVault, keyID);
 		const message = sha2_256('EXAMPLE-message-Value');
 		const signature = await key.sign(message, undefined, undefined, true);
-
+		// MEYCIQCzY/lK3X4PID792dNpgVPayWPo86NhR2WDHDnKufWDAQIhAP+89Ur8xh+3+JNeaY47zRgMC34ptxvQZDHSsDuxzrtp
+		console.info(signature);
+		console.info(signature.length);
 		const result = await key.verify(signature, message, undefined, undefined, true);
 		assert.ok(result);
 	});
