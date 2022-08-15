@@ -89,11 +89,17 @@ describe('key', function () {
 		const result = await key.verify(signature, message,);
 		assert.ok(result);
 	});
+	it('key export', async () => {
+		const keyID = 'ocid1.key.oc1.ap-singapore-1.enrhpwtoaabem.abzwsljrizggn5jlznyv7j64ccchehu6wc6vmfllyobilups4ahhp34pzyqq';
+		const key = new Key(auth, oneVault, keyID);
+		const resp = await key.export();
+		console.debug(resp);
+	});
 });
 
 describe('cli', function () {
 	this.timeout(0);
-	it.skip('RSA sign', async () => {
+	it('RSA sign', async () => {
 		const keyID = 'ocid1.key.oc1.ap-singapore-1.enrhpwtoaabem.abzwsljrh263ohsu2o7rfg4eel67wcc6akv4575e52atvziwnh2qchrm6icq';
 		const message = Buffer.from('EXAMPLE-message-Value').toString('base64');
 
@@ -103,4 +109,5 @@ describe('cli', function () {
 		const {data} = JSON.parse(execSync(cmd));
 		console.info(data);
 	});
+
 });
