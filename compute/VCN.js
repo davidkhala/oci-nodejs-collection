@@ -47,6 +47,10 @@ export class PublicIP extends AbstractVCN {
 		});
 		return slimOf(publicIp);
 	}
+
+	async delete(publicIpId) {
+		await this.client.deletePublicIp({publicIpId});
+	}
 }
 
 export class PrivateIP extends AbstractVCN {

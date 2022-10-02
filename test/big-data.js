@@ -30,5 +30,8 @@ describe('BDS', function () {
 		const {id: publicIpId} = await publicIP.create(undefined, {name: hiveServer});
 		const result = await publicIP.associate(publicIpId, {privateIpId});
 		console.info(result);
+		//	cleanup
+		await publicIP.delete(publicIpId);
+
 	});
 });
