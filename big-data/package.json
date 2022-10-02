@@ -1,0 +1,13 @@
+{
+  "name": "@davidkhala/oci-bds",
+  "version": "0.0.0",
+  "dependencies": {
+    "oci-bds": "latest"
+  },
+  "main": "index.js",
+  "devDependencies": {
+    "@davidkhala/oci-common": "latest",
+    "mocha": "latest"
+  },
+  "type": "module"
+}

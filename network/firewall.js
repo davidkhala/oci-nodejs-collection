@@ -1,5 +1,5 @@
-import {WaasClient, WaasWaiter} from 'oci-waas'
-import {AbstractService} from '@davidkhala/oci-common'
+import {WaasClient, WaasWaiter} from 'oci-waas';
+import {AbstractService} from '@davidkhala/oci-common';
 
 export default class FireWall extends AbstractService {
 	/**
@@ -8,7 +8,7 @@ export default class FireWall extends AbstractService {
 	 */
 	constructor(connector) {
 		super(connector, WaasClient);
-		this.withWaiter(WaasWaiter)
+		this.withWaiter(WaasWaiter);
 	}
 
 	/**
@@ -20,34 +20,34 @@ export default class FireWall extends AbstractService {
 	 * @param [policyConfig]
 	 */
 	async create({compartmentId, displayName, domains, origins: rawOrigins, policyConfig}) {
-		const [domain, ...additionalDomains] = domains
+		const [domain, ...additionalDomains] = domains;
 
 		if (domain && domain.includes('*')) {
-			throw Error(`Domain URL '${domain}' is not valid`)
+			throw Error(`Domain URL '${domain}' is not valid`);
 		}
 		if (additionalDomains.length === 0) {
-			additionalDomains.push(`*.${domain}`)
+			additionalDomains.push(`*.${domain}`);
 		}
-		const originGroups = {}
-		const origins = {}
-		const wafConfig = {}
-		const defaultOriginGroup = 'Default Group'
+		const originGroups = {};
+		const origins = {};
+		const wafConfig = {};
+		const defaultOriginGroup = 'Default Group';
 		if (Array.isArray(rawOrigins)) {
 			Object.assign(origins, rawOrigins.reduce((previousValue, currentValue) => {
-				previousValue[currentValue] = {uri: currentValue}
-				return previousValue
-			}, {}))
+				previousValue[currentValue] = {uri: currentValue};
+				return previousValue;
+			}, {}));
 			originGroups[defaultOriginGroup] = {
 				origins: rawOrigins.map((origin) => ({origin, weight: 1}))
-			}
-			Object.assign(wafConfig, {origin: rawOrigins[0], originGroups: [defaultOriginGroup]})
+			};
+			Object.assign(wafConfig, {origin: rawOrigins[0], originGroups: [defaultOriginGroup]});
 		} else if (typeof rawOrigins === 'string') {
-			origins[rawOrigins] = {uri: rawOrigins}
+			origins[rawOrigins] = {uri: rawOrigins};
 			originGroups[defaultOriginGroup] = {
 				origins: [{origin: rawOrigins, weight: 1}]
-			}
-			wafConfig.origin = rawOrigins
-			wafConfig.originGroups = [defaultOriginGroup]
+			};
+			wafConfig.origin = rawOrigins;
+			wafConfig.originGroups = [defaultOriginGroup];
 		} else {
 			// TODO case: rawOrigins is an Object
 		}
@@ -56,38 +56,38 @@ export default class FireWall extends AbstractService {
 			domain, additionalDomains,
 			origins, originGroups,
 			policyConfig, wafConfig
-		}
-		const {opcWorkRequestId} = await this.waf.createWaasPolicy({createWaasPolicyDetails})
+		};
+		const {opcWorkRequestId} = await this.waf.createWaasPolicy({createWaasPolicyDetails});
 		const {
 			workRequest: {
 				resources
 			}
-		} = await this.waiter.forWorkRequest({workRequestId: opcWorkRequestId})
+		} = await this.waiter.forWorkRequest({workRequestId: opcWorkRequestId});
 
-		return resources[0].identifier
+		return resources[0].identifier;
 
 	}
 
 	async delete(waasPolicyId) {
-		const {opcWorkRequestId} = await this.waf.deleteWaasPolicy({waasPolicyId})
+		const {opcWorkRequestId} = await this.waf.deleteWaasPolicy({waasPolicyId});
 		const {
 			workRequest: {
 				resources
 			}
-		} = await this.waiter.forWorkRequest({workRequestId: opcWorkRequestId})
-		return resources[0].identifier
+		} = await this.waiter.forWorkRequest({workRequestId: opcWorkRequestId});
+		return resources[0].identifier;
 	}
 
 	async get(waasPolicyId) {
-		const {waasPolicy} = await this.client.getWaasPolicy({waasPolicyId})
-		return waasPolicy
+		const {waasPolicy} = await this.client.getWaasPolicy({waasPolicyId});
+		return waasPolicy;
 	}
 
 	// TODO
 	async update(waasPolicyId, {displayName, domains}) {
 		if (displayName || domains) {
-			const updateWaasPolicyDetails = {displayName, additionalDomains}
-			//"displayName"?: string;
+			const updateWaasPolicyDetails = {displayName, additionalDomains};
+			// "displayName"?: string;
 			//     /**
 			//      * An array of additional domains protected by this WAAS policy.
 			//      */
@@ -129,7 +129,7 @@ export default class FireWall extends AbstractService {
 			//             [key: string]: any;
 			//         };
 			//     };
-			await this.client.updateWaasPolicy({waasPolicyId, updateWaasPolicyDetails})
+			await this.client.updateWaasPolicy({waasPolicyId, updateWaasPolicyDetails});
 		} else {
 
 		}

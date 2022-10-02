@@ -3,50 +3,55 @@ import {
 	Region,
 	ConfigFileAuthenticationDetailsProvider,
 	ResourcePrincipalAuthenticationDetailsProvider
-} from "oci-common";
-import {IdentityClient} from "oci-identity";
-import assert from "assert";
+} from 'oci-common';
+import {IdentityClient} from 'oci-identity';
+import assert from 'assert';
 
 class _Connector {
-	constructor() {
+	/**
+	 * @param {string} [compartmentId]
+	 */
+	constructor(compartmentId) {
+		this.compartmentId = compartmentId;
 		/**
 		 *
 		 * @type {AuthenticationDetailsProvider}
 		 */
-		this.provider = undefined
+		this.provider = undefined;
 	}
 
 	async connect() {
 		const identityClient = new IdentityClient({
 			authenticationDetailsProvider: this.provider
 		});
-		await identityClient.listAllCompartments({})
+		await identityClient.listAllCompartments({});
 
-		return identityClient
+		return identityClient;
 	}
 }
 
 export class SimpleAuthentication extends _Connector {
 	/**
 	 *
-	 * @param tenancy
-	 * @param user
-	 * @param fingerprint
-	 * @param {string} privateKey pem format string
-	 * @param {string} regionId
+	 * @param [tenancy]
+	 * @param [user]
+	 * @param [fingerprint]
+	 * @param {string} [privateKey] pem format string
+	 * @param {string} [regionId]
+	 * @param [compartmentId]
 	 */
-	constructor({tenancy, user, fingerprint, privateKey, regionId} = process.env) {
-		super()
+	constructor({tenancy, user, fingerprint, privateKey, regionId, compartmentId} = process.env) {
+		super(compartmentId);
 		if (privateKey && fingerprint) {
 			this.provider = new SimpleAuthenticationDetailsProvider(tenancy, user, fingerprint, privateKey, null, Region.fromRegionId(regionId));
 
 		} else {
 			try {
-				const fileAuthN = new FileAuthentication()
-				assert.ok(fileAuthN.validate())
-				this.provider = fileAuthN.provider
+				const fileAuthN = new FileAuthentication();
+				assert.ok(fileAuthN.validate());
+				this.provider = fileAuthN.provider;
 			} catch (e) {
-				this.provider = new IAMAuthentication()
+				this.provider = new DynamicGroupAuthentication();
 			}
 
 		}
@@ -54,14 +59,14 @@ export class SimpleAuthentication extends _Connector {
 }
 
 export class FileAuthentication extends _Connector {
-	constructor() {
-		super()
-		this.provider = new ConfigFileAuthenticationDetailsProvider()
+	constructor(compartmentId) {
+		super(compartmentId);
+		this.provider = new ConfigFileAuthenticationDetailsProvider();
 	}
 
 	validate() {
-		const {provider} = this
-		return provider.getPrivateKey() && provider.getFingerprint() && provider.getTenantId() && provider.getUser()
+		const {provider} = this;
+		return provider.getPrivateKey() && provider.getFingerprint() && provider.getTenantId() && provider.getUser();
 	}
 
 	async connect() {
@@ -72,10 +77,10 @@ export class FileAuthentication extends _Connector {
 
 }
 
-export class IAMAuthentication extends _Connector {
-	constructor() {
-		super();
-		this.provider = new ResourcePrincipalAuthenticationDetailsProvider()
+export class DynamicGroupAuthentication extends _Connector {
+	constructor(compartmentId) {
+		super(compartmentId);
+		this.provider = new ResourcePrincipalAuthenticationDetailsProvider();
 	}
 }
 
@@ -88,32 +93,37 @@ export class AbstractService {
 	 */
 	constructor(connector, ClientCLass, client) {
 		if (client) {
-			this.client = client
+			this.client = client;
 		} else {
-			const {provider} = connector
-			this.client = new ClientCLass({authenticationDetailsProvider: provider})
+			const {provider, compartmentId} = connector;
+			this.compartmentId = compartmentId;
+			this.client = new ClientCLass({authenticationDetailsProvider: provider});
 		}
 
 	}
 
 	/**
 	 *
-	 * @param {function} WaiterClass
+	 * @param {function} [WaiterClass]
 	 */
 	withWaiter(WaiterClass) {
-		this.waiter = new WaiterClass(this.client)
+		if (WaiterClass) {
+			this.waiter = new WaiterClass(this.client);
+		} else {
+			this.waiter = this.client.getWaiters();
+		}
 	}
 
 	async wait({opcWorkRequestId}, expectedOperationType) {
 		if (!this.waiter) {
-			return
+			return;
 		}
-		const {workRequest} = await this.waiter.forWorkRequest({workRequestId: opcWorkRequestId})
-		const {operationType, status, resources} = workRequest
+		const {workRequest} = await this.waiter.forWorkRequest({workRequestId: opcWorkRequestId});
+		const {operationType, status, resources} = workRequest;
 		if (expectedOperationType) {
-			assert.strictEqual(operationType, expectedOperationType)
+			assert.strictEqual(operationType, expectedOperationType);
 		}
-		assert.strictEqual(status, 'SUCCEEDED')
-		return resources.map(({identifier}) => identifier)
+		assert.strictEqual(status, 'SUCCEEDED');
+		return resources.map(({identifier}) => identifier);
 	}
 }

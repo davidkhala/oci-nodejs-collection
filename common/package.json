@@ -1,16 +1,20 @@
 {
   "name": "@davidkhala/oci-common",
-  "version": "0.0.1",
+  "version": "0.0.3-alpha.1",
   "dependencies": {
     "oci-common": "latest",
     "oci-identity": "latest",
     "oci-workrequests": "latest"
   },
+  "main": "index.js",
   "scripts": {
     "test": "mocha test"
   },
   "devDependencies": {
     "mocha": "latest"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "type": "module"
 }

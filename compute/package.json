@@ -1,7 +1,9 @@
 {
-  "name": "oci-nodejs-collection",
-  "version": "1.0.0",
-  "private": "true",
+  "name": "@davidkhala/oci-compute",
+  "version": "0.0.0",
+  "dependencies": {
+    "oci-core": "latest"
+  },
   "devDependencies": {
     "@davidkhala/oci-common": "latest",
     "mocha": "latest"

@@ -42,7 +42,7 @@ describe('san check', function () {
 	})
 	it('instance principle', async () => {
 		if (process.env.CI) {
-			// skip for Github workflow
+			// skip for GitHub workflow
 			return
 		}
 		const auth = new SimpleAuthentication()
