@@ -1,7 +1,7 @@
 import {VirtualNetworkClient} from 'oci-core';
 import assert from 'assert';
 import {AbstractService} from '@davidkhala/oci-common';
-import {slimOf} from '@davidkhala/oci-common/format.js'
+import {slimOf} from '@davidkhala/oci-common/format.js';
 import {CreatePublicIpDetails} from 'oci-core/lib/model/create-public-ip-details.js';
 import {ListPublicIpsRequest} from 'oci-core/lib/request/index.js';
 
@@ -45,7 +45,7 @@ export class PublicIP extends AbstractVCN {
 				privateIpId,
 			}
 		});
-		return publicIp;
+		return slimOf(publicIp);
 	}
 }
 

@@ -7,9 +7,9 @@ export class BigData extends AbstractService {
 		this.withWaiter(BdsWaiter);
 	}
 
-	async list(compartmentId, {state, name} = {}) {
+	async list({state, name} = {}) {
 		const {items} = await this.client.listBdsInstances({
-			compartmentId,
+			compartmentId: this.compartmentId,
 			lifecycleState: state,
 			displayName: name,
 		});

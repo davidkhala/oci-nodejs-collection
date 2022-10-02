@@ -4,11 +4,11 @@ import {PrivateIP, PublicIP} from '../compute/VCN.js';
 
 describe('BDS', function () {
 	this.timeout(0);
-	const auth = new SimpleAuthentication();
+	const compartmentId = 'ocid1.compartment.oc1..aaaaaaaaw2hdbvkul6ocyl6lrowdiu3y44sop4owoya5nrmhlsx7d3gbyrea';
+	const auth = new SimpleAuthentication({compartmentId});
 	const bds = new BigData(auth);
 	const privateIp = new PrivateIP(auth);
 	const publicIP = new PublicIP(auth);
-	const compartmentId = 'ocid1.compartment.oc1..aaaaaaaaw2hdbvkul6ocyl6lrowdiu3y44sop4owoya5nrmhlsx7d3gbyrea';
 
 	before(async () => {
 		await auth.connect();
@@ -18,7 +18,7 @@ describe('BDS', function () {
 		const name = 'analytic';
 		const hiveServerSuffix = 'un0';
 		const hiveServer = BigData.nodeNameOf(name, hiveServerSuffix);
-		const one = await bds.list(compartmentId, {name});
+		const one = await bds.list({name});
 		const details = await bds.inspect(one.id);
 
 		const nodeIPs = BigData.nodeIPsOf(details);
