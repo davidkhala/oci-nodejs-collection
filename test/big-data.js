@@ -1,6 +1,7 @@
 import {BigData} from '../big-data/index.js';
 import {SimpleAuthentication} from '@davidkhala/oci-common';
 import {PrivateIP, PublicIP} from '../compute/VCN.js';
+import {exposeBDSNode} from './recipe/big-data.js';
 
 describe('BDS', function () {
 	this.timeout(0);
@@ -17,21 +18,19 @@ describe('BDS', function () {
 	it('expose hive server', async () => {
 		const name = 'analytic';
 		const hiveServerSuffix = 'un0';
-		const hiveServer = BigData.nodeNameOf(name, hiveServerSuffix);
-		const one = await bds.list({name});
-		const details = await bds.inspect(one.id);
-
-		const nodeIPs = BigData.nodeIPsOf(details);
-		const found = nodeIPs.find(({displayName}) => {
-			return displayName === hiveServer;
-		});
-		console.debug(found);
-		const {id: privateIpId} = await privateIp.find(found);
-		const {id: publicIpId} = await publicIP.create(undefined, {name: hiveServer});
-		const result = await publicIP.associate(publicIpId, {privateIpId});
-		console.info(result);
+		const publicIpId = await exposeBDSNode(bds, privateIp, publicIP, name, hiveServerSuffix);
 		//	cleanup
 		await publicIP.delete(publicIpId);
 
 	});
+	it('expose master node', async () => {
+		const name = 'analytic';
+		const masterNodeSuffix = 'mn0';
+
+		const publicIpId = await exposeBDSNode(bds, privateIp, publicIP, name, masterNodeSuffix);
+		//	cleanup
+		await publicIP.delete(publicIpId);
+	});
+
+
 });
