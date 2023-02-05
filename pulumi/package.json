@@ -1,0 +1,7 @@
+{
+  "name": "@davidkhala/pulumi-oci",
+  "version": "1.0.0",
+  "dependencies": {
+    "@pulumi/oci": "latest"
+  }
+}
