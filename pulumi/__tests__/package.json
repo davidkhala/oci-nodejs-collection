@@ -1,0 +1,8 @@
+{
+  "name": "__tests__",
+  "private": true,
+  "version": "1.0.0",
+  "dependencies": {
+    "@davidkhala/pulumi-oci": "0.0.1-rc4"
+  }
+}

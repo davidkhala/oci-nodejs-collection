@@ -1,4 +1,4 @@
-import {CustomResourceOptions} from '@pulumi/pulumi';
+import {CustomResourceOptions} from '@pulumi/pulumi/resource';
 import {CompartmentArgs, Compartment} from '@pulumi/oci/identity/compartment';
 
 export class Tenancy extends Compartment {
