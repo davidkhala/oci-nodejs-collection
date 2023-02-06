@@ -1,6 +1,6 @@
 {
   "name": "@davidkhala/pulumi-oci",
-  "version": "0.0.1-rc2",
+  "version": "0.0.1-rc3",
   "description": "pulumi-oci typescript tools",
   "dependencies": {
     "@pulumi/oci": "latest"
@@ -15,5 +15,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "type": "module"
 }
